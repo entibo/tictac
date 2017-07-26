@@ -1,0 +1,22 @@
+{
+  "name": "tictac",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/entibo/tictac.git"
+  },
+  "author": "entibo",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/entibo/tictac/issues"
+  },
+  "homepage": "https://github.com/entibo/tictac#readme",
+  "dependencies": {
+    "ws": "^3.0.0"
+  }
+}
