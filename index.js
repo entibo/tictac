@@ -1,17 +1,25 @@
-const WebSocket = require('ws');
+const path = require("path")
+const express = require("express")
+const ws = require("ws")
 
-console.log("Hi!")
+const PORT = process.env.PORT || 5000
+console.log(PORT)
 
-const wss = new WebSocket.Server({ port: 5000 });
+const publicRoot = path.join(__dirname, "/public")
+const expressServer = express().use(express.static(publicRoot))
+	.listen(PORT, ()=> console.log(`Listening on ${PORT}`))
 
-wss.on('connection', function connection(ws) {
-  ws.on('message', function incoming(message) {
-    console.log('received: %s', message);
-    ws.send(message)
-  });
+const wss = new ws.Server({ server: expressServer })
 
-  ws.send('something');
-});
+wss.on("connection", socket => {
+	console.log("Client connected")
+	socket.on("message", msg => {
+		console.log("received: "+msg)
+		socket.send("Echo "+msg)
+	})
+	socket.on("close", () => console.log("Client disconnected"))
+	socket.send("something");
+})
 
-wss.on('error', function(e) { console.log(e) })
-wss.on('listening', function() { console.log("listening") })
+wss.on("error", e => console.log(e))
+wss.on("listening", ()=> console.log("Socket server listening"))
