@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Tic Tac Toe</title>
+	<script type="text/javascript" src="main.js"></script>
+	<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+
+<div id="app">
+
+	<div m-literal:class="classNames">
+
+		<div
+		m-for="cell,idx in grid"
+		m-on:click="cellClick(idx)"
+		class="grid-cell">
+			<mark m-literal:type="['','x','o'][cell]"></mark>
+		</div>
+
+		<div class="pane right">
+			<div m-show="is('connection')">
+				<div class="loading-icon"></div>
+				<div>Searching for opponent...</div>
+			</div>
+			<input
+			m-show="is('playing')"
+			m-literal:value="state.playing.opponentName"
+			disabled
+			type="text"
+			class="usernameBox"
+			/>
+		</div>
+		<div class="pane left">
+			<input
+			m-model="username"
+			m-literal:disabled="!is('main-menu')"
+			m-on:keydown.enter="playOnline"
+			autofocus
+			type="text"
+			maxlength="16"
+			placeholder="Anonymous"
+			class="usernameBox"
+			/>
+			<div m-show="is('main-menu')" class="buttons">
+				<button
+				m-on:click="playOnline"
+				class="button-online"
+				>Play online</button>
+				<button
+				m-on:click="playOffline"
+				class="button-practice"
+				>Practice</button>
+			</div>
+			<div m-show="!is('main-menu')" class="buttons">
+				<button
+				m-on:click="quitGame"
+				class="button-cancel"
+				>Back to menu</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>start()</script>
+</body>
+</html>

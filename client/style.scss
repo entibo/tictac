@@ -1,0 +1,161 @@
+html,body {
+	margin: 0;
+	width: 100%;
+	height: 100%;
+}
+body {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background: #4c4c4c;
+	font-family: sans-serif;
+}
+
+
+.mark-container {
+	position: relative;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	>div {
+		position: absolute;
+		transform: scale(0) rotate(0);
+		transition: 100ms;
+	}
+	&.o {
+		>div {
+			border-radius: 50%;
+			transform: scale(1);
+		}
+		>div:first-child {
+			width: 100%;
+			height: 100%;
+			background: #4c4c4c;
+		}
+		>div:last-child {
+			width: 70%;
+			height: 70%;
+			background: #f7f7f7;
+		}
+	}
+	&.x {
+		>div {
+			border-radius: 5px;
+			width: 125%;
+			height: 15%;
+			background: #4c4c4c;
+		}
+		>div:first-child {
+			transform: scale(1) rotate(45deg);
+		}
+		>div:last-child {
+			transform: scale(1) rotate(-45deg);
+		}
+	}
+}
+
+
+.grid-container {
+	width: 300px;
+	position: relative;
+	display: flex;
+	flex-flow: row wrap;
+	border: 14px solid #f3f3f3;
+	border-radius: 10px;
+	background: #76e4bf;
+}
+.grid-cell {
+	cursor: pointer;
+	width: 70px;
+	height: 70px;
+	margin: 15px;
+	padding: 12px;
+	box-sizing: border-box;
+	border-radius: 5px;
+	box-shadow: inset 0 2px 7px rgba(0, 0, 0, 0.12);
+	background: #f7f7f7;
+}
+.grid-cell:nth-child(5) {
+	margin: 10px;
+	padding: 17px;
+	width: 80px;
+	height: 80px;
+}
+
+.pane {
+	transition: 300ms;
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	background: rgba(0, 0, 0, 0.50);
+	color: #f5f5f5;
+	box-sizing: border-box;
+	border: 0px solid #e4e4e4;
+}
+.playing.ongoing.left .pane.left,
+.playing.ongoing.right .pane.right {
+	border: 14px solid #e4e4e4;
+	border-right: none;
+	border-left: none;
+}
+.connection .pane.left,
+.playing.ongoing .pane.left,
+.playing.complete.win.right .pane.left {
+	transform: translateX(-100%);
+    border-radius: 10px 0 0 10px;
+    background: rgba(0, 0, 0, 0.25);
+}
+
+.playing.ongoing .pane.right,
+.playing.complete.win.left .pane.right {
+	transform: translateX(100%);
+    border-radius: 0 10px 10px 0;
+    background: rgba(0, 0, 0, 0.25);
+}
+
+.playing.complete.draw .pane.left {
+	transform: translateX(-50%);
+    border-radius: 10px 0 0 10px;
+    background: rgba(0, 0, 0, 0.25);
+}
+.playing.complete.draw .pane.right {
+	transform: translateX(50%);
+    border-radius: 0 10px 10px 0;
+    background: rgba(0, 0, 0, 0.25);
+}
+
+.usernameBox {
+	padding: 6px;
+    font-size: 2em;
+    width: 250px;
+    text-align: center;
+    background: none;
+    border: none;
+    color: white;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.38);
+    margin: 10px;
+}
+.pane .buttons {
+    margin: 10px;
+}
+.pane button {
+	min-width: 80px;
+	height: 40px;
+	background: #ababab;
+	border: 2px solid rgb(255, 255, 255);
+	border-radius: 3px;
+	box-shadow: inset 0px -1px 3px 0px rgba(0, 0, 0, 0.13);
+	font-weight: bold;
+	font-size: 1.1em;
+	color: white;
+	text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.38);
+	cursor: pointer;
+}
+.pane .button-online { background: #76e4bf; }
+.pane .button-practice { }
+.pane .button-cancel { background: #e49276; }
