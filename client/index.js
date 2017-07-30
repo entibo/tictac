@@ -4,7 +4,6 @@ window.Moon = Moon
 
 const host = location.origin.replace(/^http/, 'ws')
 const server = new WebSocket(host)
-server = server
 
 function randInt(a,b){return a+Math.floor(Math.random()*(++b-a))}
 
@@ -18,7 +17,8 @@ Moon.component("mark", {
 	computed: {
 		dimStyle: {
 			get: function() {
-				let w = h = "100%"
+				let w = "100%",
+					h = "100%"
 				if(this.get("width") !== undefined)
 					w = this.get("width")
 				if(this.get("height") !== undefined)

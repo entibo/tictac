@@ -7,18 +7,17 @@ module.exports = {
     filename: "./dist/main.js"
   },
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.js$/,
-        include: __dirname,
         loader: "babel-loader",
         exclude: /node_modules/
+      },
+      {
+        test: /\.scss$/,
+        use: ExtractTextPlugin.extract(['css-loader', 'sass-loader'])
       }
-    ],
-    rules: [{
-      test: /\.scss$/,
-      use: ExtractTextPlugin.extract(['css-loader', 'sass-loader'])
-    }]
+    ]
   },
   plugins: [
     new ExtractTextPlugin("./dist/style.css")

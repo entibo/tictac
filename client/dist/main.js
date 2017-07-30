@@ -75,43 +75,41 @@ module.exports = __webpack_require__(3);
 /* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
+"use strict";
 
-const Moon = __webpack_require__(2)
-window.Moon = Moon
 
-const host = location.origin.replace(/^http/, 'ws')
-const server = new WebSocket(host)
-server = server
+var Moon = __webpack_require__(2);
+window.Moon = Moon;
 
-function randInt(a,b){return a+Math.floor(Math.random()*(++b-a))}
+var host = location.origin.replace(/^http/, 'ws');
+var server = new WebSocket(host);
+
+function randInt(a, b) {
+	return a + Math.floor(Math.random() * (++b - a));
+}
 
 Moon.component("mark", {
 	props: ["type", "width", "height"],
-	template:
-		`<div m-literal:class="['mark-container', type]" m-literal:style="dimStyle">
-			<div></div>
-			<div></div>
-		</div>`,
+	template: "<div m-literal:class=\"['mark-container', type]\" m-literal:style=\"dimStyle\">\n\t\t\t<div></div>\n\t\t\t<div></div>\n\t\t</div>",
 	computed: {
 		dimStyle: {
-			get: function() {
-				let w = h = "100%"
-				if(this.get("width") !== undefined)
-					w = this.get("width")
-				if(this.get("height") !== undefined)
-					h = this.get("height")
-				return `width:${w};height:${h}`
+			get: function get() {
+				var w = "100%",
+				    h = "100%";
+				if (this.get("width") !== undefined) w = this.get("width");
+				if (this.get("height") !== undefined) h = this.get("height");
+				return "width:" + w + ";height:" + h;
 			}
 		}
 	}
-})
+});
 
-window.start = function() {
+window.start = function () {
 
-	const app = new Moon({
+	var app = new Moon({
 		el: "#app",
 		data: {
-			grid: [0,1,2,0,0,2,2,1,0],
+			grid: [0, 1, 2, 0, 0, 2, 2, 1, 0],
 			username: "",
 
 			stateStack: ["main-menu"],
@@ -137,177 +135,220 @@ window.start = function() {
 		},
 		computed: {
 			classNames: {
-				get: function() {
-					let stack = this.get("stateStack"),
-						state = this.get("state")
-					let o = {}
-					for(let k of stack) {
-						o[k] = true
+				get: function get() {
+					var stack = this.get("stateStack"),
+					    state = this.get("state");
+					var o = {};
+					var _iteratorNormalCompletion = true;
+					var _didIteratorError = false;
+					var _iteratorError = undefined;
+
+					try {
+						for (var _iterator = stack[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+							var k = _step.value;
+
+							o[k] = true;
+						}
+					} catch (err) {
+						_didIteratorError = true;
+						_iteratorError = err;
+					} finally {
+						try {
+							if (!_iteratorNormalCompletion && _iterator.return) {
+								_iterator.return();
+							}
+						} finally {
+							if (_didIteratorError) {
+								throw _iteratorError;
+							}
+						}
 					}
-					o["grid-container"] = true
-					return o
+
+					o["grid-container"] = true;
+					return o;
 				}
 			}
 		},
 		methods: {
-			validateUsername: function() {
-				let s = this.get("username")
-				if(s.length == 0)
-					this.set("username", "Anonymous")
-				else if(s.length > 16)
-					this.set("username", s.substr(0,16))
+			validateUsername: function validateUsername() {
+				var s = this.get("username");
+				if (s.length == 0) this.set("username", "Anonymous");else if (s.length > 16) this.set("username", s.substr(0, 16));
 			},
-			gridStatus: function() {
-				let g = this.get("grid")
-				let filled = true
-				for(let v of g)
-					if(v === 0)
-						filled = false
-				for(let indeces of [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]]) {
-					let r = indeces.map(i=>g[i]).reduce((a,b)=>a===b?a:0)
-					if(r !== 0) return {
+			gridStatus: function gridStatus() {
+				var g = this.get("grid");
+				var filled = true;
+				var _iteratorNormalCompletion2 = true;
+				var _didIteratorError2 = false;
+				var _iteratorError2 = undefined;
+
+				try {
+					for (var _iterator2 = g[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+						var v = _step2.value;
+
+						if (v === 0) filled = false;
+					}
+				} catch (err) {
+					_didIteratorError2 = true;
+					_iteratorError2 = err;
+				} finally {
+					try {
+						if (!_iteratorNormalCompletion2 && _iterator2.return) {
+							_iterator2.return();
+						}
+					} finally {
+						if (_didIteratorError2) {
+							throw _iteratorError2;
+						}
+					}
+				}
+
+				var _arr = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]];
+				for (var _i = 0; _i < _arr.length; _i++) {
+					var indeces = _arr[_i];
+					var r = indeces.map(function (i) {
+						return g[i];
+					}).reduce(function (a, b) {
+						return a === b ? a : 0;
+					});
+					if (r !== 0) return {
 						complete: true,
 						draw: false,
 						winner: r,
-						indeces
-					}
+						indeces: indeces
+					};
 				}
-				if(filled) return { complete: true, draw: true }
-				else return { complete: false }
+				if (filled) return { complete: true, draw: true };else return { complete: false };
 			},
-			is: function(name) {
-				let xs = name.split("."),
-					stack = this.get("stateStack")
-				for(let i=0; i < xs.length; i++)
-					if(xs[i] !== stack[i])
-						return false
-				return true
+			is: function is(name) {
+				var xs = name.split("."),
+				    stack = this.get("stateStack");
+				for (var i = 0; i < xs.length; i++) {
+					if (xs[i] !== stack[i]) return false;
+				}return true;
 			},
-			setState: function(name, ...args) {
-				let stack = name.split(".")
-				this.set("stateStack", stack)
-				let state = this.get("state")
-				switch(name) {
+			setState: function setState(name) {
+				var _this = this;
+
+				var stack = name.split(".");
+				this.set("stateStack", stack);
+				var state = this.get("state");
+
+				for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+					args[_key - 1] = arguments[_key];
+				}
+
+				switch (name) {
 					case "main-menu":
-						break
+						break;
 					case "connection":
 						server.send(JSON.stringify({
 							type: "partner",
 							name: this.get("username")
-						}))
-						break
+						}));
+						break;
 					case "playing":
-						let online = args[0]
-						this.set("state.playing.online", online)
-						let turn
-						if(online === true) {
-							this.set("state.playing.opponentName", args[1])
-							turn = args[2]
+						var online = args[0];
+						this.set("state.playing.online", online);
+						var turn = void 0;
+						if (online === true) {
+							this.set("state.playing.opponentName", args[1]);
+							turn = args[2];
+						} else {
+							this.set("state.playing.opponentName", "CPU");
+							turn = randInt(0, 1) == 0 ? "left" : "right";
 						}
-						else {
-							this.set("state.playing.opponentName", "CPU")
-							turn = randInt(0,1)==0 ? "left" : "right"
-						}
-						for(let i=0; i < 9; i++)
-							this.set(`grid[${i}]`, 0)
-						this.callMethod("setState", ["playing.ongoing."+turn])
-						break
+						for (var i = 0; i < 9; i++) {
+							this.set("grid[" + i + "]", 0);
+						}this.callMethod("setState", ["playing.ongoing." + turn]);
+						break;
 					case "playing.ongoing.left":
 					case "playing.ongoing.right":
-						let r = this.callMethod("gridStatus")
-						if(r.complete) {
-							if(r.draw)
-								this.callMethod("setState", ["playing.complete.draw"])
-							else {
-								let winner = r.winner==1 ? "left" : "right"
-								this.callMethod("setState", [`playing.complete.win.${winner}`])
+						var r = this.callMethod("gridStatus");
+						if (r.complete) {
+							if (r.draw) this.callMethod("setState", ["playing.complete.draw"]);else {
+								var winner = r.winner == 1 ? "left" : "right";
+								this.callMethod("setState", ["playing.complete.win." + winner]);
 							}
+						} else if (stack[stack.length - 1] === "right" && state.playing.online === false) {
+							setTimeout(function () {
+								var indeces = [];
+								var g = _this.get("grid");
+								for (var _i2 = 0; _i2 < 9; _i2++) {
+									if (g[_i2] === 0) indeces.push(_i2);
+								}var choice = indeces[randInt(0, indeces.length - 1)];
+								_this.set("grid[" + choice + "]", 2);
+								_this.callMethod("setState", ["playing.ongoing.left"]);
+							}, randInt(200, 500));
 						}
-						else if(stack[stack.length-1] === "right" && state.playing.online === false) {
-							setTimeout(()=> {
-								let indeces = []
-								let g = this.get("grid")
-								for(let i=0; i < 9; i++)
-									if(g[i]===0)
-										indeces.push(i)
-								let choice = indeces[randInt(0, indeces.length-1)]
-								this.set(`grid[${choice}]`, 2)
-								this.callMethod("setState", ["playing.ongoing.left"])
-							}, randInt(200,500))
-						}
-						break
+						break;
 					case "playing.complete.draw":
 					case "playing.complete.draw.win.left":
 					case "playing.complete.draw.win.right":
 						// setTimeout(()=> {
 						// 	that.callMethod("setState", ["main-menu"])
 						// }, 1000)
-						break
+						break;
 					default:
-						console.log("State with no function: ", name, args)
-						break
+						console.log("State with no function: ", name, args);
+						break;
 				}
 			},
-			playOnline: function() {
-				this.callMethod("validateUsername")
-				this.callMethod("setState", ["connection"])
+			playOnline: function playOnline() {
+				this.callMethod("validateUsername");
+				this.callMethod("setState", ["connection"]);
 			},
-			playOffline: function() {
-				this.callMethod("validateUsername")
-				this.callMethod("setState", ["playing", false])
+			playOffline: function playOffline() {
+				this.callMethod("validateUsername");
+				this.callMethod("setState", ["playing", false]);
 			},
-			cellClick: function(idx) {
-				let state = this.get("state")
-				if( this.callMethod("is", ["playing.ongoing.left"]) &&
-					this.get("grid")[idx] === 0 )
-				{
-					this.set(`grid[${idx}]`, 1)
-					this.callMethod("setState", ["playing.ongoing.right"])
-					if(state.playing.online === true) {
+			cellClick: function cellClick(idx) {
+				var state = this.get("state");
+				if (this.callMethod("is", ["playing.ongoing.left"]) && this.get("grid")[idx] === 0) {
+					this.set("grid[" + idx + "]", 1);
+					this.callMethod("setState", ["playing.ongoing.right"]);
+					if (state.playing.online === true) {
 						server.send(JSON.stringify({
 							type: "move",
-							idx
-						}))
+							idx: idx
+						}));
 					}
 				}
 			},
-			onMessage: function(msg) {
-				console.log(msg)
-				let o = JSON.parse(msg)
-				switch(o.type) {
+			onMessage: function onMessage(msg) {
+				console.log(msg);
+				var o = JSON.parse(msg);
+				switch (o.type) {
 					case "opponentMove":
-						let state = this.get("state")
-						if( this.callMethod("is", ["playing.ongoing.right"]) && state.playing.online === true) {
-							this.set(`grid[${o.idx}]`, 2)
-							this.callMethod("setState", ["playing.ongoing.left"])
+						var state = this.get("state");
+						if (this.callMethod("is", ["playing.ongoing.right"]) && state.playing.online === true) {
+							this.set("grid[" + o.idx + "]", 2);
+							this.callMethod("setState", ["playing.ongoing.left"]);
 						}
-						break
+						break;
 					case "partner":
-						if(this.callMethod("is", ["connection"]))
-							this.callMethod("setState", ["playing", true, o.name, o.turn])
-						break
+						if (this.callMethod("is", ["connection"])) this.callMethod("setState", ["playing", true, o.name, o.turn]);
+						break;
 					case "end":
-						this.callMethod("quitGame")
+						this.callMethod("quitGame");
 				}
 			},
-			quitGame: function() {
-				let state = this.get("state")
-				if(this.callMethod("is", ["connection"]) || (this.callMethod("is", ["playing"]) && state.playing.online === true)) {
+			quitGame: function quitGame() {
+				var state = this.get("state");
+				if (this.callMethod("is", ["connection"]) || this.callMethod("is", ["playing"]) && state.playing.online === true) {
 					server.send(JSON.stringify({
 						type: "cancel"
-					}))
+					}));
 				}
-				this.callMethod("setState", ["main-menu"])
+				this.callMethod("setState", ["main-menu"]);
 			}
 		}
-	})
+	});
 
 	// window.app = app
-	server.addEventListener("message", msg => {
-		app.callMethod("onMessage", [msg.data])
-	})
-
-}
+	server.addEventListener("message", function (msg) {
+		app.callMethod("onMessage", [msg.data]);
+	});
+};
 
 /***/ }),
 /* 2 */
